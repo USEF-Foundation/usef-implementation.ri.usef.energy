@@ -3,25 +3,23 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>energy.usef.example</groupId>
-		<artifactId>usef-workflow-impl</artifactId>
+		<artifactId>usef-vudp-impl</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>usef-impl-dso</artifactId>
+	<artifactId>usef-vudp-brp</artifactId>
 
 	<dependencies>
 		<dependency>
 			<groupId>energy.usef</groupId>
-			<artifactId>usef-dso</artifactId>
+			<artifactId>usef-brp</artifactId>
 			<version>${usef.version}</version>
 		</dependency>
-
 		<!-- Only needed if you want to use the RI PBC's -->
         <dependency>
             <groupId>energy.usef</groupId>
-            <artifactId>usef-simulation-dso</artifactId>
+            <artifactId>usef-simulation-brp</artifactId>
             <version>${usef.version}</version>
         </dependency>
-
 
 	</dependencies>
 </project>

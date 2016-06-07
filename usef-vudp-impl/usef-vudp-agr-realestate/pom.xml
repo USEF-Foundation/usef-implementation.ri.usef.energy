@@ -1,25 +1,23 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>energy.usef.example</groupId>
-        <artifactId>usef-workflow-impl</artifactId>
+        <artifactId>usef-vudp-impl</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
+    <artifactId>usef-vudp-agr-realestate</artifactId>
 
-    <artifactId>usef-impl-mdc</artifactId>
     <dependencies>
         <dependency>
             <groupId>energy.usef</groupId>
-            <artifactId>usef-mdc</artifactId>
+            <artifactId>usef-agr</artifactId>
             <version>${usef.version}</version>
         </dependency>
-
-        <!-- Only needed if you want to use the RI PBC's-->
+        <!-- Only needed if you want to use the RI PBC's -->
         <dependency>
             <groupId>energy.usef</groupId>
-            <artifactId>usef-simulation-mdc</artifactId>
+            <artifactId>usef-simulation-agr</artifactId>
             <version>${usef.version}</version>
         </dependency>
 

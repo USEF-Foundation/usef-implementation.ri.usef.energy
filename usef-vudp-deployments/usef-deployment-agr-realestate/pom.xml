@@ -6,7 +6,7 @@
         <artifactId>usef-deployments</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>usef-deployment-agr</artifactId>
+    <artifactId>usef-deployment-agr-realestate</artifactId>
     <packaging>war</packaging>
 
     <profiles>

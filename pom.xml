@@ -9,7 +9,7 @@
 	</parent>
 	
 	<groupId>energy.usef.example</groupId>
-    <artifactId>usef-impl</artifactId>
+    <artifactId>usef-vudp</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -18,8 +18,8 @@
     </properties>
 	
 	<modules>
-		<module>usef-workflow-impl</module>
-		<module>usef-deployments</module>
+		<module>usef-vudp-impl</module>
+		<module>usef-vudp-deployments</module>
 	</modules>
 
 </project>

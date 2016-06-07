@@ -3,14 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>energy.usef.example</groupId>
-        <artifactId>usef-impl</artifactId>
+        <artifactId>usef-vudp</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>usef-deployments</artifactId>
+    <artifactId>usef-vudp-deployments</artifactId>
     <packaging>pom</packaging>
 
     <modules>
-        <module>usef-deployment-agr</module>
+        <module>usef-deployment-agr-realestate</module>
         <module>usef-deployment-brp</module>
         <module>usef-deployment-cro</module>
         <module>usef-deployment-dso</module>
