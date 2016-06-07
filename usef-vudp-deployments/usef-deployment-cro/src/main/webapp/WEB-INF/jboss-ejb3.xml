@@ -10,7 +10,7 @@
             <activation-config>
                 <activation-config-property>
                     <activation-config-property-name>destination</activation-config-property-name>
-                    <activation-config-property-value>java:jboss/exported/jms/usefInQueue_cro1.usef-example.com_CRO
+                    <activation-config-property-value>java:jboss/exported/jms/usefInQueue_cro.vudp.com
                     </activation-config-property-value>
                 </activation-config-property>
             </activation-config>
@@ -21,7 +21,7 @@
             <activation-config>
                 <activation-config-property>
                     <activation-config-property-name>destination</activation-config-property-name>
-                    <activation-config-property-value>java:jboss/exported/jms/usefOutQueue_cro1.usef-example.com_CRO
+                    <activation-config-property-value>java:jboss/exported/jms/usefOutQueue_cro.vudp.com
                     </activation-config-property-value>
                 </activation-config-property>
             </activation-config>
@@ -32,7 +32,7 @@
             <activation-config>
                 <activation-config-property>
                     <activation-config-property-name>destination</activation-config-property-name>
-                    <activation-config-property-value>java:jboss/exported/jms/usefNotSentQueue_cro1.usef-example.com_CRO
+                    <activation-config-property-value>java:jboss/exported/jms/usefNotSentQueue_cro.vudp.com
                     </activation-config-property-value>
                 </activation-config-property>
             </activation-config>

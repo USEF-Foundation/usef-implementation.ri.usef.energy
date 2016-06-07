@@ -3,15 +3,15 @@
     <hornetq-server>
         <jms-destinations>
             <jms-queue name="IN_QUEUE_CRO1.USEF-EXAMPLE.COM_CRO">
-                <entry name="java:jboss/exported/jms/usefInQueue_cro1.usef-example.com_CRO"/>
+                <entry name="java:jboss/exported/jms/usefInQueue_cro.vudp.com"/>
                 <durable>true</durable>
             </jms-queue>
             <jms-queue name="OUT_QUEUE_CRO1.USEF-EXAMPLE.COM_CRO">
-                <entry name="java:jboss/exported/jms/usefOutQueue_cro1.usef-example.com_CRO"/>
+                <entry name="java:jboss/exported/jms/usefOutQueue_cro.vudp.com"/>
                 <durable>true</durable>
             </jms-queue>
             <jms-queue name="NOT_SENT_QUEUE_CRO1.USEF-EXAMPLE.COM_CRO">
-                <entry name="java:jboss/exported/jms/usefNotSentQueue_cro1.usef-example.com_CRO"/>
+                <entry name="java:jboss/exported/jms/usefNotSentQueue_cro.vudp.com"/>
                 <durable>true</durable>
             </jms-queue>
         </jms-destinations>

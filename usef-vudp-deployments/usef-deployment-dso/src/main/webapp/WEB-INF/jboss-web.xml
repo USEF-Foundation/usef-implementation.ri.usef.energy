@@ -4,14 +4,14 @@
     <context-root>dso1.usef-example.com_DSO</context-root>
     <resource-ref>
         <res-ref-name>jms/queue/inQueue</res-ref-name>
-        <jndi-name>java:jboss/exported/jms/usefInQueue_dso1.usef-example.com_DSO</jndi-name>
+        <jndi-name>java:jboss/exported/jms/usefInQueue_dso.vudp.com</jndi-name>
     </resource-ref>
     <resource-ref>
         <res-ref-name>jms/queue/outQueue</res-ref-name>
-        <jndi-name>java:jboss/exported/jms/usefOutQueue_dso1.usef-example.com_DSO</jndi-name>
+        <jndi-name>java:jboss/exported/jms/usefOutQueue_dso.vudp.com</jndi-name>
     </resource-ref>
     <resource-ref>
         <res-ref-name>jms/queue/notSentQueue</res-ref-name>
-        <jndi-name>java:jboss/exported/jms/usefNotSentQueue_dso1.usef-example.com_DSO</jndi-name>
+        <jndi-name>java:jboss/exported/jms/usefNotSentQueue_dso.vudp.com</jndi-name>
     </resource-ref>
 </jboss-web>

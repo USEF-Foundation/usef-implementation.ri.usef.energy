@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>energy.usef.example</groupId>
+        <groupId>energy.usef.vudp</groupId>
         <artifactId>usef-vudp</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -10,8 +10,11 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>usef-deployment-agr-realestate</module>
-        <module>usef-deployment-brp</module>
+        <module>usef-deployment-agr-emobility</module>
+        <module>usef-deployment-agr-industrial</module>
+        <module>usef-deployment-agr-residential</module>
+        <module>usef-deployment-brp-industrial</module>
+        <module>usef-deployment-brp-residential</module>
         <module>usef-deployment-cro</module>
         <module>usef-deployment-dso</module>
         <module>usef-deployment-mdc</module>

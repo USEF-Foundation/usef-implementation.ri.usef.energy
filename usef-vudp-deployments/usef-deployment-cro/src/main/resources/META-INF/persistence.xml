@@ -36,7 +36,7 @@
 
 			<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
 			<property name="hibernate.show_sql" value="false" />
-			<property name="hibernate.default_schema" value="CRO1_USEF_EXAMPLE_COM_CRO" />
+			<property name="hibernate.default_schema" value="cro_vudp_com" />
 			<!-- <property name="wildfly.jpa.twophasebootstrap" value="false"/> -->
 		</properties>
 

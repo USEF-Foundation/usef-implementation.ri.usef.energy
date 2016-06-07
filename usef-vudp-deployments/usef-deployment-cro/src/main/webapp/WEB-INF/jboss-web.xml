@@ -4,14 +4,14 @@
     <context-root>cro1.usef-example.com_CRO</context-root>
     <resource-ref>
         <res-ref-name>jms/queue/inQueue</res-ref-name>
-        <jndi-name>java:jboss/exported/jms/usefInQueue_cro1.usef-example.com_CRO</jndi-name>
+        <jndi-name>java:jboss/exported/jms/usefInQueue_cro.vudp.com</jndi-name>
     </resource-ref>
     <resource-ref>
         <res-ref-name>jms/queue/outQueue</res-ref-name>
-        <jndi-name>java:jboss/exported/jms/usefOutQueue_cro1.usef-example.com_CRO</jndi-name>
+        <jndi-name>java:jboss/exported/jms/usefOutQueue_cro.vudp.com</jndi-name>
     </resource-ref>
     <resource-ref>
         <res-ref-name>jms/queue/notSentQueue</res-ref-name>
-        <jndi-name>java:jboss/exported/jms/usefNotSentQueue_cro1.usef-example.com_CRO</jndi-name>
+        <jndi-name>java:jboss/exported/jms/usefNotSentQueue_cro.vudp.com</jndi-name>
     </resource-ref>
 </jboss-web>

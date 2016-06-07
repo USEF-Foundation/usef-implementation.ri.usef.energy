@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>energy.usef.example</groupId>
+        <groupId>energy.usef.vudp</groupId>
         <artifactId>usef-vudp</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -13,9 +13,12 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>usef-vudp-agr-realestate</module>
+        <module>usef-vudp-agr-emobility</module>
+        <module>usef-vudp-agr-industrial</module>
+        <module>usef-vudp-agr-residential</module>
+        <module>usef-vudp-brp-industrial</module>
+        <module>usef-vudp-brp-residential</module>
         <module>usef-vudp-dso</module>
-        <module>usef-vudp-brp</module>
         <module>usef-vudp-mdc</module>
     </modules>
 

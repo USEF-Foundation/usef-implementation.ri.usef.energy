@@ -3,8 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>energy.usef.example</groupId>
-        <artifactId>usef-deployments</artifactId>
+        <groupId>energy.usef.vudp</groupId>
+        <artifactId>usef-vudp-deployments</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>usef-deployment-mdc</artifactId>
@@ -25,13 +25,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>energy.usef.example</groupId>
-            <artifactId>usef-impl-mdc</artifactId>
+            <groupId>energy.usef.vudp</groupId>
+            <artifactId>usef-vudp-mdc</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
-        <finalName>mdc1.usef-example.com_MDC</finalName>
+        <finalName>mdc.vudp.com</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>

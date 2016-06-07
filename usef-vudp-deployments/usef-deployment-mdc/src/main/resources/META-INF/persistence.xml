@@ -35,7 +35,7 @@
 
 			<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
 			<property name="hibernate.show_sql" value="false" />
-			<property name="hibernate.default_schema" value="MDC1_USEF_EXAMPLE_COM_MDC" />
+			<property name="hibernate.default_schema" value="mdc_vudp_com" />
 			<!-- <property name="wildfly.jpa.twophasebootstrap" value="false"/> -->
 		</properties>
 

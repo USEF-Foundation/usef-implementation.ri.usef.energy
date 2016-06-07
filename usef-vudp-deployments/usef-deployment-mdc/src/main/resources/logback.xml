@@ -20,10 +20,10 @@
             <OnMismatch>ACCEPT</OnMismatch>
             <OnMatch>DENY</OnMatch>
         </filter>
-        <file>${jboss.server.log.dir}/mdc1.usef-example.com_MDC/default-messages.log</file>
+        <file>${jboss.server.log.dir}/mdc.vudp.com/default-messages.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>${jboss.server.log.dir}/mdc1.usef-example.com_MDC/default%d{yyyy-MM-dd_HH}.log</fileNamePattern>
+            <fileNamePattern>${jboss.server.log.dir}mdc.vudp.com/default%d{yyyy-MM-dd_HH}.log</fileNamePattern>
             <!-- keep 72 hours worth of history -->
             <maxHistory>72</maxHistory>
         </rollingPolicy>
@@ -46,10 +46,10 @@
             <onMismatch>DENY</onMismatch>
         </filter>
 
-        <file>${jboss.server.log.dir}/mdc1.usef-example.com_MDC/confidential-messages.log</file>
+        <file>${jboss.server.log.dir}mdc.vudp.com/confidential-messages.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>${jboss.server.log.dir}/mdc1.usef-example.com_MDC/confidential%d{yyyy-MM-dd_HH}.log</fileNamePattern>
+            <fileNamePattern>${jboss.server.log.dir}/mdc.vudp.com/confidential%d{yyyy-MM-dd_HH}.log</fileNamePattern>
             <!-- keep 12 hours worth of history -->
             <maxHistory>12</maxHistory>
         </rollingPolicy>
@@ -64,6 +64,6 @@
         <appender-ref ref="CONFIDENTIAL_FILE"/>
     </root>
 
-    <include optional="true" file="${jboss.server.config.dir}/mdc1.usef-example.com_MDC/LogBackWithAdditionalLoggers.xml"/>
+    <include optional="true" file="${jboss.server.config.dir}/mdc.vudp.com/LogBackWithAdditionalLoggers.xml"/>
 
 </configuration>

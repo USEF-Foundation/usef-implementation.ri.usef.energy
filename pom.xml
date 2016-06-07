@@ -8,7 +8,7 @@
 		<version>1.3.1</version>
 	</parent>
 	
-	<groupId>energy.usef.example</groupId>
+	<groupId>energy.usef.vudp</groupId>
     <artifactId>usef-vudp</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
