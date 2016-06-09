@@ -1,19 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<messaging-deployment xmlns="urn:jboss:messaging-deployment:1.0">
-    <hornetq-server>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><messaging-deployment xmlns="urn:jboss:messaging-activemq-deployment:1.0">
+    <server name="default">
         <jms-destinations>
-            <jms-queue name="IN_QUEUE_MDC1.USEF-EXAMPLE.COM_MDC">
-                <entry name="java:jboss/exported/jms/usefInQueue_mdc1.usef-example.com_MDC"/>
+            <jms-queue name="IN_QUEUE_MDC.VUDP.COM_MDC">
+                <entry name="java:jboss/exported/jms/usefInQueue_mdc.vudp.com_MDC"/>
                 <durable>true</durable>
             </jms-queue>
-            <jms-queue name="OUT_QUEUE_MDC1.USEF-EXAMPLE.COM_MDC">
-                <entry name="java:jboss/exported/jms/usefOutQueue_mdc1.usef-example.com_MDC"/>
+            <jms-queue name="OUT_QUEUE_MDC.VUDP.COM_MDC">
+                <entry name="java:jboss/exported/jms/usefOutQueue_mdc.vudp.com_MDC"/>
                 <durable>true</durable>
             </jms-queue>
-            <jms-queue name="NOT_SENT_QUEUE_MDC1.USEF-EXAMPLE.COM_MDC">
-                <entry name="java:jboss/exported/jms/usefNotSentQueue_mdc1.usef-example.com_MDC"/>
+            <jms-queue name="NOT_SENT_QUEUE_MDC.VUDP.COM_MDC">
+                <entry name="java:jboss/exported/jms/usefNotSentQueue_mdc.vudp.com_MDC"/>
                 <durable>true</durable>
             </jms-queue>
         </jms-destinations>
-    </hornetq-server>
+    </server>
 </messaging-deployment>

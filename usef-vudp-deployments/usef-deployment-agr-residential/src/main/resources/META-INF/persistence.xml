@@ -1,9 +1,6 @@
-<persistence version="2.0"
-             xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 
-    <persistence-unit name="ApplicationPersistenceUnit"
-                      transaction-type="JTA">
+    <persistence-unit name="ApplicationPersistenceUnit" transaction-type="JTA">
 
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
@@ -40,7 +37,6 @@
 
         <class>energy.usef.agr.model.PowerContainer</class>
         <class>energy.usef.agr.model.PowerData</class>
-        <class>energy.usef.agr.model.MeteredPowerData</class>
         <class>energy.usef.agr.model.ConnectionGroupPowerContainer</class>
         <class>energy.usef.agr.model.ConnectionPowerContainer</class>
         <class>energy.usef.agr.model.UdiPowerContainer</class>
@@ -80,7 +76,7 @@
 
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
             <property name="hibernate.show_sql" value="false"/>
-            <property name="hibernate.default_schema" value="residential_agr_vudp_com"/>
+            <property name="hibernate.default_schema" value="RESIDENTIAL_AGR_VUDP_COM_AGR"/>
             <!-- <property name="wildfly.jpa.twophasebootstrap" value="false"/> -->
         </properties>
 

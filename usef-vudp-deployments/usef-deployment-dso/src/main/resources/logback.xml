@@ -1,8 +1,8 @@
-<configuration scan="true" scanPeriod="10 seconds">
-  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><configuration scan="true" scanPeriod="10 seconds">
+  <appender class="ch.qos.logback.core.ConsoleAppender" name="STDOUT">
     <filter class="ch.qos.logback.core.filter.EvaluatorFilter">      
       <evaluator> <!-- defaults to type ch.qos.logback.classic.boolex.JaninoEventEvaluator -->
-        <expression>return logger.contains("info.usef.CONFIDENTIAL");</expression>
+        <expression>return logger.contains("energy.usef.CONFIDENTIAL");</expression>
       </evaluator>
       <OnMismatch>ACCEPT</OnMismatch>
       <OnMatch>DENY</OnMatch>
@@ -12,18 +12,18 @@
     </encoder>
   </appender>
 
-  <appender name="DEFAULT_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="DEFAULT_FILE">
       <filter class="ch.qos.logback.core.filter.EvaluatorFilter">      
       <evaluator> <!-- defaults to type ch.qos.logback.classic.boolex.JaninoEventEvaluator -->
-        <expression>return logger.contains("info.usef.CONFIDENTIAL");</expression>
+        <expression>return logger.contains("energy.usef.CONFIDENTIAL");</expression>
       </evaluator>
       <OnMismatch>ACCEPT</OnMismatch>
       <OnMatch>DENY</OnMatch>
     </filter>
-    <file>${jboss.server.log.dir}/dso.vudp.com/default-messages.log</file>
+    <file>${jboss.server.log.dir}/dso.vudp.com_DSO/default-messages.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
       <!-- daily rollover -->
-      <fileNamePattern>${jboss.server.log.dir}/dso.vudp.com/default%d{yyyy-MM-dd_HH}.log</fileNamePattern>
+      <fileNamePattern>${jboss.server.log.dir}/dso.vudp.com_DSO/default%d{yyyy-MM-dd_HH}.log</fileNamePattern>
       <!-- keep 72 hours worth of history -->
       <maxHistory>72</maxHistory>
     </rollingPolicy>
@@ -32,10 +32,10 @@
     </encoder>
   </appender> 
   
-  <appender name="CONFIDENTIAL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="CONFIDENTIAL_FILE">
       <filter class="ch.qos.logback.core.filter.EvaluatorFilter">      
       <evaluator> <!-- defaults to type ch.qos.logback.classic.boolex.JaninoEventEvaluator -->
-        <expression>return logger.contains("info.usef.CONFIDENTIAL");</expression>
+        <expression>return logger.contains("energy.usef.CONFIDENTIAL");</expression>
       </evaluator>
       <OnMismatch>DENY</OnMismatch>
       <OnMatch>NEUTRAL</OnMatch>
@@ -46,10 +46,10 @@
       <onMismatch>DENY</onMismatch>
     </filter>
     
-    <file>${jboss.server.log.dir}/dso.vudp.com/confidential-messages.log</file>
+    <file>${jboss.server.log.dir}/dso.vudp.com_DSO/confidential-messages.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
       <!-- daily rollover -->
-      <fileNamePattern>${jboss.server.log.dir}/dso.vudp.com/confidential%d{yyyy-MM-dd_HH}.log</fileNamePattern>
+      <fileNamePattern>${jboss.server.log.dir}/dso.vudp.com_DSO/confidential%d{yyyy-MM-dd_HH}.log</fileNamePattern>
       <!-- keep 12 hours worth of history -->
       <maxHistory>12</maxHistory>
     </rollingPolicy>
@@ -64,6 +64,6 @@
       <appender-ref ref="CONFIDENTIAL_FILE"/>
   </root>
 
-  <include optional="true" file="${jboss.server.config.dir}/dso.vudp.com/LogBackWithAdditionalLoggers.xml"/>
+  <include file="${jboss.server.config.dir}/dso.vudp.com_DSO/LogBackWithAdditionalLoggers.xml" optional="true"/>
 
 </configuration>

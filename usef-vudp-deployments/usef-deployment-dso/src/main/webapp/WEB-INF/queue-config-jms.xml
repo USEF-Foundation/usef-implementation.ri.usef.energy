@@ -1,19 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<messaging-deployment xmlns="urn:jboss:messaging-deployment:1.0">
-    <hornetq-server>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><messaging-deployment xmlns="urn:jboss:messaging-activemq-deployment:1.0">
+    <server name="default">
         <jms-destinations>
-            <jms-queue name="IN_QUEUE_DSO1.USEF-EXAMPLE.COM_DSO">
-                <entry name="java:jboss/exported/jms/usefInQueue_dso.vudp.com"/>
+            <jms-queue name="IN_QUEUE_DSO.VUDP.COM_DSO">
+                <entry name="java:jboss/exported/jms/usefInQueue_dso.vudp.com_DSO"/>
                 <durable>true</durable>
             </jms-queue>
-            <jms-queue name="OUT_QUEUE_DSO1.USEF-EXAMPLE.COM_DSO">
-                <entry name="java:jboss/exported/jms/usefOutQueue_dso.vudp.com"/>
+            <jms-queue name="OUT_QUEUE_DSO.VUDP.COM_DSO">
+                <entry name="java:jboss/exported/jms/usefOutQueue_dso.vudp.com_DSO"/>
                 <durable>true</durable>
             </jms-queue>
-            <jms-queue name="NOT_SENT_QUEUE_DSO1.USEF-EXAMPLE.COM_DSO">
-                <entry name="java:jboss/exported/jms/usefNotSentQueue_dso.vudp.com"/>
+            <jms-queue name="NOT_SENT_QUEUE_DSO.VUDP.COM_DSO">
+                <entry name="java:jboss/exported/jms/usefNotSentQueue_dso.vudp.com_DSO"/>
                 <durable>true</durable>
             </jms-queue>
         </jms-destinations>
-    </hornetq-server>
+    </server>
 </messaging-deployment>

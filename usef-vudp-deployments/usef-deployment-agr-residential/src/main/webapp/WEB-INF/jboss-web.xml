@@ -1,17 +1,15 @@
-<?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<jboss-web xmlns="http://www.jboss.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation=" http://www.jboss.com/xml/ns/javaee http://www.jboss.org/j2ee/schema/jboss-web_5_1.xsd">
-    <context-root>agr1.usef-example.com_AGR</context-root>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><jboss-web xmlns="http://www.jboss.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://www.jboss.com/xml/ns/javaee http://www.jboss.org/j2ee/schema/jboss-web_5_1.xsd">
+	<context-root>residential-agr.vudp.com_AGR</context-root>
     <resource-ref>
         <res-ref-name>jms/queue/inQueue</res-ref-name>
-        <jndi-name>java:jboss/exported/jms/usefInQueue_residential-agr.vudp.com</jndi-name>
+        <jndi-name>java:jboss/exported/jms/usefInQueue_residential-agr.vudp.com_AGR</jndi-name>
     </resource-ref>
     <resource-ref>
         <res-ref-name>jms/queue/outQueue</res-ref-name>
-        <jndi-name>java:jboss/exported/jms/usefOutQueue_residential-agr.vudp.com</jndi-name>
+        <jndi-name>java:jboss/exported/jms/usefOutQueue_residential-agr.vudp.com_AGR</jndi-name>
     </resource-ref>
     <resource-ref>
         <res-ref-name>jms/queue/notSentQueue</res-ref-name>
-        <jndi-name>java:jboss/exported/jms/usefNotSentQueue_residential-agr.vudp.com</jndi-name>
+        <jndi-name>java:jboss/exported/jms/usefNotSentQueue_residential-agr.vudp.com_AGR</jndi-name>
     </resource-ref>
 </jboss-web>

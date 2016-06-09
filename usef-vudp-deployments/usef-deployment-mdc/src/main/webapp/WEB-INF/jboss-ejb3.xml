@@ -1,42 +1,36 @@
-<?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<jboss:ejb-jar xmlns:jboss="http://www.jboss.com/xml/ns/javaee" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:s="urn:security:1.1"
-               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" impl-version="2.0" version="3.1"
-               xsi:schemaLocation="http://www.jboss.com/xml/ns/javaee http://www.jboss.org/j2ee/schema/jboss-ejb3.xsd http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_1.xsd">
+<?xml version="1.1" encoding="UTF-8" standalone="no"?><jboss:ejb-jar xmlns:jboss="http://www.jboss.com/xml/ns/javaee" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:s="urn:security:1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" impl-version="2.0" version="3.1" xsi:schemaLocation="http://www.jboss.com/xml/ns/javaee http://www.jboss.org/j2ee/schema/jboss-ejb3.xsd http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_1.xsd">
 
-    <enterprise-beans>
-        <message-driven>
-            <ejb-name>IN_QUEUE_MDB</ejb-name>
-            <ejb-class>energy.usef.core.service.mdb.IncomingQueueMDB</ejb-class>
-            <activation-config>
-                <activation-config-property>
-                    <activation-config-property-name>destination</activation-config-property-name>
-                    <activation-config-property-value>java:jboss/exported/jms/usefInQueue_mdc1.usef-example.com_MDC
-                    </activation-config-property-value>
-                </activation-config-property>
-            </activation-config>
-        </message-driven>
-        <message-driven>
-            <ejb-name>OUT_QUEUE_MDB</ejb-name>
-            <ejb-class>energy.usef.core.service.mdb.OutgoingQueueMDB</ejb-class>
-            <activation-config>
-                <activation-config-property>
-                    <activation-config-property-name>destination</activation-config-property-name>
-                    <activation-config-property-value>java:jboss/exported/jms/usefOutQueue_mdc1.usef-example.com_MDC
-                    </activation-config-property-value>
-                </activation-config-property>
-            </activation-config>
-        </message-driven>
-        <message-driven>
-            <ejb-name>NOT_SENT_QUEUE_MDB</ejb-name>
-            <ejb-class>energy.usef.core.service.mdb.NotSentQueueMDB</ejb-class>
-            <activation-config>
-                <activation-config-property>
-                    <activation-config-property-name>destination</activation-config-property-name>
-                    <activation-config-property-value>java:jboss/exported/jms/usefNotSentQueue_mdc1.usef-example.com_MDC
-                    </activation-config-property-value>
-                </activation-config-property>
-            </activation-config>
-        </message-driven>
-    </enterprise-beans>
+	<enterprise-beans>
+		<message-driven>
+			<ejb-name>IN_QUEUE_MDB</ejb-name>
+			<ejb-class>energy.usef.core.service.mdb.IncomingQueueMDB</ejb-class>
+			<activation-config>
+				<activation-config-property>
+					<activation-config-property-name>destination</activation-config-property-name>
+					<activation-config-property-value>java:jboss/exported/jms/usefInQueue_mdc.vudp.com_MDC</activation-config-property-value>
+				</activation-config-property>
+			</activation-config>
+		</message-driven>
+		<message-driven>
+			<ejb-name>OUT_QUEUE_MDB</ejb-name>
+			<ejb-class>energy.usef.core.service.mdb.OutgoingQueueMDB</ejb-class>
+			<activation-config>
+				<activation-config-property>
+					<activation-config-property-name>destination</activation-config-property-name>
+					<activation-config-property-value>java:jboss/exported/jms/usefOutQueue_mdc.vudp.com_MDC</activation-config-property-value>
+				</activation-config-property>
+			</activation-config>
+		</message-driven>
+		<message-driven>
+			<ejb-name>NOT_SENT_QUEUE_MDB</ejb-name>
+			<ejb-class>energy.usef.core.service.mdb.NotSentQueueMDB</ejb-class>
+			<activation-config>
+				<activation-config-property>
+					<activation-config-property-name>destination</activation-config-property-name>
+					<activation-config-property-value>java:jboss/exported/jms/usefNotSentQueue_mdc.vudp.com_MDC</activation-config-property-value>
+				</activation-config-property>
+			</activation-config>
+		</message-driven>
+	</enterprise-beans>
 
 </jboss:ejb-jar>
