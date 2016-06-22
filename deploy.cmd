@@ -1,10 +1,10 @@
-@echo off
-mvn clean install -P demo
+@echo on
+call mvn clean install -P demo
 
 cd usef-vudp-deployments
 
 FOR /D %%d in ("*") DO (
-    echo %%;
+    echo %%d
     cd %%d
     mvn wildfly:deploy
     cd .. )
