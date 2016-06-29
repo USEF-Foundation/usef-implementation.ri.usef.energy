@@ -18,6 +18,7 @@
         <module>usef-deployment-cro</module>
         <module>usef-deployment-dso</module>
         <module>usef-deployment-mdc</module>
+        <module>usef-pbcfeeder</module>
     </modules>
     <dependencies>
         <dependency>
