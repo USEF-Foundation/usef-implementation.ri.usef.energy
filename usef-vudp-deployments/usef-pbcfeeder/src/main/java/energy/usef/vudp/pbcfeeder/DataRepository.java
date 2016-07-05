@@ -2,7 +2,6 @@ package energy.usef.vudp.pbcfeeder;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -13,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import energy.usef.core.config.AbstractConfig;
+import energy.usef.vudp.pbcfeeder.model.Data;
 import energy.usef.vudp.pbcfeeder.watcher.FileWatcher;
 import energy.usef.vudp.pbcfeeder.watcher.Updatable;
 
@@ -24,13 +24,13 @@ public class DataRepository implements Updatable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DataRepository.class);
 
-    private static final String PBC_FILE_NAME = "vudp-pbc-data.xlsx";
+    public static final String PBC_FILE_NAME = "vudp-pbc-data.xlsm";
 
     private ExecutorService watcherExecutor = Executors.newSingleThreadExecutor();
 
     private Path pbcDataFile;
 
-    private HashMap<String, Object> currentData = new HashMap<>();
+    private Data currentData;
 
     @PostConstruct
     public void init() {
@@ -43,7 +43,10 @@ public class DataRepository implements Updatable {
         if(pbcDataFile == null) {
             LOGGER.error("No pbc data file configured under name: {}/{}", AbstractConfig.CONFIG_FOLDER_PROPERTY, PBC_FILE_NAME);
         }
-        currentData = DataFactory.buildNewData(pbcDataFile);
+        currentData = new DataFactory(pbcDataFile).getData();
     }
 
+    public Data findData() {
+        return currentData;
+    }
 }

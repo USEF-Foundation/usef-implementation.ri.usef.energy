@@ -6,7 +6,6 @@
             <subsystem name="logging"/>
         </exclude-subsystems>
         <dependencies>
-            <module name="org.dom4j"/>
             <module name="org.joda.time"/>
             <module name="org.jboss.resteasy.resteasy-jackson-provider"/>
         </dependencies>
