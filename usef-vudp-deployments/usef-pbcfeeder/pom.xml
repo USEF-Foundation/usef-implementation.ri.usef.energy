@@ -25,6 +25,11 @@
         </dependency>
 
         <dependency>
+            <groupId>energy.usef.vudp</groupId>
+            <artifactId>usef-vudp-pbc-client</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
             <version>3.11</version>
@@ -34,24 +39,7 @@
             <artifactId>poi-ooxml</artifactId>
             <version>3.11</version>
         </dependency>
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>tjws</artifactId>
-            <version>3.0.8.Final</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jaxrs</artifactId>
-            <version>3.0.8.Final</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jackson-provider</artifactId>
-            <version>3.0.8.Final</version>
-            <scope>provided</scope>
-        </dependency>
+
 
         <dependency>
             <groupId>ch.qos.logback</groupId>

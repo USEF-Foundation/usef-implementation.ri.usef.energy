@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 
 import org.junit.Test;
 
-import energy.usef.vudp.pbcfeeder.model.Data;
+import energy.usef.vudp.pbcfeeder.dto.Data;
 
 /**
  *

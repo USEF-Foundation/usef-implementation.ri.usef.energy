@@ -20,6 +20,7 @@
         <module>usef-vudp-brp-residential</module>
         <module>usef-vudp-dso</module>
         <module>usef-vudp-mdc</module>
+        <module>usef-vudp-pbc-client</module>
     </modules>
 
 </project>

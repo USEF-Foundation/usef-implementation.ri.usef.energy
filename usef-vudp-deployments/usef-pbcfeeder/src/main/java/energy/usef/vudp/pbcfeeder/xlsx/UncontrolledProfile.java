@@ -1,4 +1,4 @@
-package energy.usef.vudp.pbcfeeder.model;
+package energy.usef.vudp.pbcfeeder.xlsx;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 /**
  *
  */
-public class UncontrolledPower {
+public class UncontrolledProfile {
 
     public static final String TAB_UNCONTROLLED = "UNCONTROLLEDPROFILES";
 
@@ -20,7 +20,7 @@ public class UncontrolledPower {
     private Long forecast;
     private Long observed;
 
-    public UncontrolledPower(String profile, Integer day, Integer ptu, Long forecast, Long observed) {
+    public UncontrolledProfile(String profile, Integer day, Integer ptu, Long forecast, Long observed) {
         this.profile = profile;
         this.day = day;
         this.ptu = ptu;
@@ -28,8 +28,8 @@ public class UncontrolledPower {
         this.observed = observed;
     }
 
-    public static List<UncontrolledPower> readUncontrolledProfiles(Workbook pbcWorkbook) {
-        List<UncontrolledPower> uncontrolledPowers = new ArrayList<>();
+    public static List<UncontrolledProfile> readUncontrolledProfiles(Workbook pbcWorkbook) {
+        List<UncontrolledProfile> uncontrolledProfiles = new ArrayList<>();
         Sheet pbcDataSheet = pbcWorkbook.getSheet(TAB_UNCONTROLLED);
         for (Row row : pbcDataSheet) {
             if (row.getRowNum() == 0 || row.getCell(0) == null) {
@@ -42,10 +42,10 @@ public class UncontrolledPower {
             Long forecast = (long) row.getCell(3).getNumericCellValue();
             Long observed = (long) row.getCell(4).getNumericCellValue();
 
-            UncontrolledPower uncontrolledPower = new UncontrolledPower(profile, day, ptu, forecast, observed);
-            uncontrolledPowers.add(uncontrolledPower);
+            UncontrolledProfile uncontrolledProfile = new UncontrolledProfile(profile, day, ptu, forecast, observed);
+            uncontrolledProfiles.add(uncontrolledProfile);
         }
-        return uncontrolledPowers;
+        return uncontrolledProfiles;
     }
 
     public String getProfile() {

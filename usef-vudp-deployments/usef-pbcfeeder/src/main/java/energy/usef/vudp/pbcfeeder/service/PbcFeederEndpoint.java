@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import energy.usef.vudp.pbcfeeder.DataRepository;
-import energy.usef.vudp.pbcfeeder.model.Data;
+import energy.usef.vudp.pbcfeeder.dto.Data;
 
 /**
  * Endpoint to request data from the PBCFeeder.

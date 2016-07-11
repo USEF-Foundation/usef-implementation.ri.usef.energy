@@ -4,11 +4,13 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toMap;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -21,14 +23,16 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import energy.usef.vudp.pbcfeeder.model.CategoryConfig;
-import energy.usef.vudp.pbcfeeder.model.Connection;
-import energy.usef.vudp.pbcfeeder.model.Data;
-import energy.usef.vudp.pbcfeeder.model.Device;
-import energy.usef.vudp.pbcfeeder.model.DeviceConfig;
-import energy.usef.vudp.pbcfeeder.model.DeviceProfile;
-import energy.usef.vudp.pbcfeeder.model.Settings;
-import energy.usef.vudp.pbcfeeder.model.UncontrolledPower;
+import energy.usef.vudp.pbcfeeder.dto.Connection;
+import energy.usef.vudp.pbcfeeder.dto.Data;
+import energy.usef.vudp.pbcfeeder.dto.Device;
+import energy.usef.vudp.pbcfeeder.dto.Power;
+import energy.usef.vudp.pbcfeeder.dto.Settings;
+import energy.usef.vudp.pbcfeeder.dto.UncontrolledPower;
+import energy.usef.vudp.pbcfeeder.xlsx.CategoryConfig;
+import energy.usef.vudp.pbcfeeder.xlsx.DeviceConfig;
+import energy.usef.vudp.pbcfeeder.xlsx.DeviceProfile;
+import energy.usef.vudp.pbcfeeder.xlsx.UncontrolledProfile;
 
 /**
  * Data Repository, responsible for retreiving the correct data from the excel.
@@ -44,7 +48,7 @@ public class DataFactory {
     private List<CategoryConfig> categoryConfigs;
     private List<DeviceConfig> deviceConfigs;
 
-    private List<UncontrolledPower> uncontrolledPower;
+    private List<UncontrolledProfile> uncontrolledProfile;
     private List<DeviceProfile> deviceProfiles;
 
     public DataFactory(Path pbcDataFile) {
@@ -59,7 +63,7 @@ public class DataFactory {
 
             deviceConfigs = DeviceConfig.readDeviceConfig(pbcWorkbook);
 
-            uncontrolledPower = UncontrolledPower.readUncontrolledProfiles(pbcWorkbook);
+            uncontrolledProfile = UncontrolledProfile.readUncontrolledProfiles(pbcWorkbook);
             deviceProfiles = DeviceProfile.readDeviceProfiles(pbcWorkbook);
 
             initConnections(pbcWorkbook);
@@ -74,8 +78,8 @@ public class DataFactory {
         Map<String, CategoryConfig> categoryConfigMap = categoryConfigs.stream()
                 .collect(toMap(CategoryConfig::getName, Function.identity()));
 
-        Map<String, List<UncontrolledPower>> uncontrolledPowerMap = uncontrolledPower.stream()
-                .collect(groupingBy(UncontrolledPower::getProfile));
+        Map<String, List<UncontrolledProfile>> uncontrolledProfilesMap = uncontrolledProfile.stream()
+                .collect(groupingBy(UncontrolledProfile::getProfile));
 
         for (Row row : pbcWorkbook.getSheet(TAB_CONNECTIONS)) {
             if (row.getRowNum() == 0 || row.getCell(0) == null) {
@@ -88,7 +92,13 @@ public class DataFactory {
             if (categoryConfigMap.containsKey(category)) {
                 CategoryConfig categoryConfig = categoryConfigMap.get(category);
 
-                Connection connection = new Connection(ean, uncontrolledPowerMap.get(categoryConfig.getUncontrolled()));
+                List<UncontrolledProfile> uncontrolledProfiles = uncontrolledProfilesMap.get(categoryConfig.getUncontrolled());
+                Map<Integer, Map<Integer, UncontrolledPower>> uncontrolledPowerMap = uncontrolledProfiles.stream()
+                        .collect(groupingBy(UncontrolledProfile::getDay,
+                                Collectors.toMap(UncontrolledProfile::getPtu,
+                                        up -> new UncontrolledPower(up.getForecast(), up.getObserved()))));
+
+                Connection connection = new Connection(ean, uncontrolledPowerMap);
                 initDevices(connection, categoryConfig.getDevices());
 
                 data.getConnection().add(connection);
@@ -109,8 +119,44 @@ public class DataFactory {
             DeviceConfig deviceConfig = deviceConfigMap.get(deviceType);
             List<DeviceProfile> deviceProfiles = deviceProfileMap.get(deviceConfig.getProfile());
 
-            connection.getDevices().add(new Device(connection.getEan(),device, deviceConfig, deviceProfiles));
+            connection.getDevices().add(createDevice(connection.getEan(), device, deviceConfig, deviceProfiles));
         }
+    }
+
+    private Device createDevice(String ean, String name, DeviceConfig deviceConfig, List<DeviceProfile> deviceProfiles) {
+        String endpoint = "vudp://" + ean + "/" + name;
+
+        BigDecimal forecastDeviation = BigDecimal.ZERO;
+        if (deviceConfig.getForecastDeviation() > 0L) {
+            Random r = new Random();
+            forecastDeviation = new BigDecimal(1 + r.nextInt(deviceConfig.getForecastDeviation())).movePointLeft(2);
+            if (r.nextBoolean()) {
+                forecastDeviation = forecastDeviation.negate();
+            }
+        }
+
+        final BigDecimal finalForecastDeviation = forecastDeviation;
+        Map<Integer, Map<Integer, Power>> powerPerDayPerPtu = deviceProfiles.stream()
+                .collect(groupingBy(DeviceProfile::getDay,
+                        Collectors
+                                .toMap(DeviceProfile::getPtu, deviceProfile -> mapToPower(deviceProfile, finalForecastDeviation))));
+
+        return new Device(name, endpoint, forecastDeviation, deviceConfig.getFluctuation(), deviceConfig.getDtuSize(),
+                deviceConfig.getCapabilityProfile(), powerPerDayPerPtu);
+    }
+
+    private Power mapToPower(DeviceProfile deviceProfile, BigDecimal finalForecastDeviation) {
+        Power power = new Power(deviated(deviceProfile.getConsumption(), finalForecastDeviation),
+                deviated(deviceProfile.getProduction(), finalForecastDeviation),
+                deviated(deviceProfile.getFlexConsumption(), finalForecastDeviation),
+                deviated(deviceProfile.getFlexProduction(), finalForecastDeviation));
+        return power;
+    }
+
+    private Long deviated(Long power, BigDecimal finalForecastDeviation) {
+        BigDecimal powerDecimal = new BigDecimal(power);
+        BigDecimal deviation = finalForecastDeviation.multiply(powerDecimal);
+        return powerDecimal.add(deviation).longValue();
     }
 
     private Settings readSettings(Workbook pbcWorkbook) {

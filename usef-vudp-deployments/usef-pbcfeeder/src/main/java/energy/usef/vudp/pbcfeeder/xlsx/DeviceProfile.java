@@ -1,4 +1,4 @@
-package energy.usef.vudp.pbcfeeder.model;
+package energy.usef.vudp.pbcfeeder.xlsx;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 /**
- *
+ * An object representing the base profile for a device type/profile.
  */
 public class DeviceProfile {
 

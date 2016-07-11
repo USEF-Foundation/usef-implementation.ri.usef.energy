@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import energy.usef.core.config.AbstractConfig;
-import energy.usef.vudp.pbcfeeder.model.Data;
+import energy.usef.vudp.pbcfeeder.dto.Data;
 import energy.usef.vudp.pbcfeeder.watcher.FileWatcher;
 import energy.usef.vudp.pbcfeeder.watcher.Updatable;
 
