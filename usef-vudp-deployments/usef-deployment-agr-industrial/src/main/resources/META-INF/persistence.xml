@@ -4,7 +4,7 @@
 
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <jta-data-source>java:jboss/datasources/USEF_DS</jta-data-source>
+        <jta-data-source>java:jboss/datasources/INDUSTRIAL_AGR_VUDP_COM_AGR_DS</jta-data-source>
 
         <class>energy.usef.agr.model.Udi</class>
         <class>energy.usef.agr.model.UdiEvent</class>

@@ -4,7 +4,7 @@
 
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-		<jta-data-source>java:jboss/datasources/USEF_DS</jta-data-source>
+		<jta-data-source>java:jboss/datasources/CRO_VUDP_COM_CRO_DS</jta-data-source>
 
 		<class>energy.usef.core.model.Message</class>
 		<class>energy.usef.core.model.MessageError</class>
