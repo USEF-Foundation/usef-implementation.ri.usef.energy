@@ -42,32 +42,5 @@
 
     <build>
         <finalName>industrial-agr.vudp.com</finalName>
-        <plugins>
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <id>generate-ddl-create</id>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <!-- ANT Task definition -->
-                                <java classname="energy.usef.schema.SchemaObjectCreator" fork="true" failonerror="true">
-                                    <arg value="ApplicationPersistenceUnit"/>
-                                    <arg value="org.hibernate.dialect.H2Dialect"/>
-                                    <arg value="./target/ddl/"/>
-                                    <!-- reference to the passed-in classpath reference -->
-                                    <classpath refid="maven.compile.classpath"/>
-                                </java>
-                            </target>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
     </build>
 </project>
