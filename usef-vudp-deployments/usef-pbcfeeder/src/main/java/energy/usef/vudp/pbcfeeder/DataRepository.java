@@ -30,7 +30,7 @@ public class DataRepository implements Updatable {
 
     private Path pbcDataFile;
 
-    private Data currentData;
+    private DataFactory dataFactory;
 
     @PostConstruct
     public void init() {
@@ -43,10 +43,10 @@ public class DataRepository implements Updatable {
         if(pbcDataFile == null) {
             LOGGER.error("No pbc data file configured under name: {}/{}", AbstractConfig.CONFIG_FOLDER_PROPERTY, PBC_FILE_NAME);
         }
-        currentData = new DataFactory(pbcDataFile).getData();
+        dataFactory = new DataFactory(pbcDataFile);
     }
 
     public Data findData() {
-        return currentData;
+        return dataFactory.getData();
     }
 }

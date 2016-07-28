@@ -44,6 +44,8 @@ public class DataFactory {
     private static final String TAB_CONNECTIONS = "CONNECTIONS";
     private static final String SEPERATOR = "_";
 
+    private Random RANDOM;
+
     private Data data;
     private List<CategoryConfig> categoryConfigs;
     private List<DeviceConfig> deviceConfigs;
@@ -59,6 +61,8 @@ public class DataFactory {
 
             data = new Data(readSettings(pbcWorkbook));
 
+            RANDOM = new Random(data.getSettings().getSeed());
+
             categoryConfigs = CategoryConfig.readCategoryConfig(pbcWorkbook);
 
             deviceConfigs = DeviceConfig.readDeviceConfig(pbcWorkbook);
@@ -72,6 +76,10 @@ public class DataFactory {
             LOGGER.error("Path is not readable: {}", pbcDataFile, e);
         }
 
+    }
+
+    public Random getSeededRandom() {
+        return RANDOM;
     }
 
     private void initConnections(Workbook pbcWorkbook) {
@@ -128,9 +136,8 @@ public class DataFactory {
 
         BigDecimal forecastDeviation = BigDecimal.ZERO;
         if (deviceConfig.getForecastDeviation() > 0L) {
-            Random r = new Random();
-            forecastDeviation = new BigDecimal(1 + r.nextInt(deviceConfig.getForecastDeviation())).movePointLeft(2);
-            if (r.nextBoolean()) {
+            forecastDeviation = new BigDecimal(1 + RANDOM.nextInt(deviceConfig.getForecastDeviation())).movePointLeft(2);
+            if (RANDOM.nextBoolean()) {
                 forecastDeviation = forecastDeviation.negate();
             }
         }
