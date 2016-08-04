@@ -19,6 +19,7 @@
         <module>usef-deployment-dso</module>
         <module>usef-deployment-mdc</module>
         <module>usef-pbcfeeder</module>
+        <module>vudp-jmxtrans</module>
     </modules>
     <dependencies>
         <dependency>

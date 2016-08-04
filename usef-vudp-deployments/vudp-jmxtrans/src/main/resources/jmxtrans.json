@@ -1,0 +1,49 @@
+{
+    "queries":  [
+      {
+        "objectName": "jboss.as:deployment=*,subsystem=jpa,hibernate-persistence-unit=*.war#ApplicationPersistenceUnit",
+        "attributes": [
+          "connectCount",
+          "optimisticFailureCount",
+          "queryExecutionCount",
+		  "queryExecutionMaxTime",
+		  "successfulTransactionCount"
+        ]
+      },{
+        "objectName": "jboss.as:deployment=*,subsystem=ejb3,singleton-bean=*Coordinator",
+        "attributes": [
+          "invocations",
+          "executionTime",
+          "peakConcurrentInvocations"
+        ]
+      },{
+        "objectName": "jboss.as:deployment=*,subsystem=ejb3,session-bean=*Coordinator",
+        "attributes": [
+          "invocations",
+          "executionTime",
+          "peakConcurrentInvocations"
+        ]
+      }
+    ], "outputWriters": [
+    {
+        "@class": "org.jmxtrans.embedded.output.Slf4jWriter",
+        "settings": {
+            "enabled": "${jmxtrans.writer.slf4j.enabled:false}"
+        }
+    },
+    {
+        "@class": "org.jmxtrans.embedded.output.GraphiteWriter",
+        "settings": {
+            "host": "${graphite.host:localhost}",
+            "port": "${graphite.port:2003}",
+            "enabled": "${graphite.enabled:true}",
+            "namePrefix": "${graphite.namePrefix:servers.#hostname#.}"
+        }
+    }
+],
+    "queryIntervalInSeconds": "${jmxtrans.queryIntervalInSeconds:30}",
+    "numQueryThreads": "${jmxtrans.numQueryThreads:2}",
+    "numExportThreads": "${jmxtrans.numExportThreads:2}",
+    "exportIntervalInSeconds": "${jmxtrans.exportIntervalInSeconds:30}",
+    "exportBatchSize": "${jmxtrans.exportBatchSize:50}"
+}
