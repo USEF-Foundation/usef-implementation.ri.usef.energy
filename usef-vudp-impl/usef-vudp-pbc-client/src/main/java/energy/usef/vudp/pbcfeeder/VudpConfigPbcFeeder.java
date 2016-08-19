@@ -31,13 +31,13 @@ import energy.usef.core.config.AbstractConfig;
  * Property config class.
  */
 @Singleton
-public class ConfigPbcFeeder extends AbstractConfig {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigPbcFeederParam.class);
+public class VudpConfigPbcFeeder extends AbstractConfig {
+    private static final Logger LOGGER = LoggerFactory.getLogger(VudpConfigPbcFeederParam.class);
 
     /**
      * Default constructor.
      */
-    public ConfigPbcFeeder() {
+    public VudpConfigPbcFeeder() {
         try {
             readProperties();
         } catch (IOException e) {
@@ -67,7 +67,7 @@ public class ConfigPbcFeeder extends AbstractConfig {
      * @param configParam the configuration parameter
      * @return property value
      */
-    public String getProperty(ConfigPbcFeederParam configParam) {
+    public String getProperty(VudpConfigPbcFeederParam configParam) {
         if (properties == null) {
             return null;
         }
@@ -80,7 +80,7 @@ public class ConfigPbcFeeder extends AbstractConfig {
      * @param configParam the configuration parameter
      * @return property value
      */
-    public Integer getIntegerProperty(ConfigPbcFeederParam configParam) {
+    public Integer getIntegerProperty(VudpConfigPbcFeederParam configParam) {
         return Integer.parseInt(properties.getProperty(configParam.name()));
     }
 
@@ -90,7 +90,7 @@ public class ConfigPbcFeeder extends AbstractConfig {
      * @param configParam the configuration parameter
      * @return property value
      */
-    public boolean getBooleanProperty(ConfigPbcFeederParam configParam) {
+    public boolean getBooleanProperty(VudpConfigPbcFeederParam configParam) {
         return Boolean.parseBoolean(properties.getProperty(configParam.name()));
     }
 }

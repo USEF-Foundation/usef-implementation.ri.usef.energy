@@ -39,10 +39,10 @@ public class PbcFeederClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(PbcFeederClient.class);
 
     @Inject
-    private ConfigPbcFeeder config;
+    private VudpConfigPbcFeeder config;
 
     public Data findData() {
-        String pbcEndpoint = config.getProperty(ConfigPbcFeederParam.PBC_FEEDER_ENDPOINT) + "/data";
+        String pbcEndpoint = config.getProperty(VudpConfigPbcFeederParam.PBC_FEEDER_ENDPOINT) + "/data";
 
         String value = get(pbcEndpoint);
         ObjectMapper mapper = new ObjectMapper();

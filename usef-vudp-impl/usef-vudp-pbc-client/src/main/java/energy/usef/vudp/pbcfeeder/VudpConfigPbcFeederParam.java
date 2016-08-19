@@ -19,7 +19,7 @@ package energy.usef.vudp.pbcfeeder;
 /**
  * The PBC Feeder config parameter contains all configuration parameters specific to the PBC feeder.
  */
-public enum ConfigPbcFeederParam {
+public enum VudpConfigPbcFeederParam {
     PBC_FEEDER_ENDPOINT(String.class);
 
     private Class<?> propertyClass;
@@ -29,7 +29,7 @@ public enum ConfigPbcFeederParam {
      *
      * @param propertyClass the property class describes the type of parameter and what validations can be done on the parameter.
      */
-    ConfigPbcFeederParam(Class<?> propertyClass) {
+    VudpConfigPbcFeederParam(Class<?> propertyClass) {
         this.propertyClass = propertyClass;
     }
 
