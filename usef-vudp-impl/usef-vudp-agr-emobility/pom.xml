@@ -20,6 +20,12 @@
             <artifactId>usef-simulation-agr</artifactId>
             <version>${usef.version}</version>
         </dependency>
+        <dependency>
+            <groupId>energy.usef.vudp</groupId>
+            <artifactId>usef-vudp-pbc-client</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
 
     </dependencies>
 
