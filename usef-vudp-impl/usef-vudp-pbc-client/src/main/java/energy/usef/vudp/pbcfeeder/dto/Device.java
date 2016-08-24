@@ -14,6 +14,7 @@ public class Device {
     private Integer fluctuation;
     private Integer dtuSize;
     private String profile;
+    private String capabilityProfile;
 
     private Map<Integer, Map<Integer, Power>> powerPerDayPerPtu;
 
@@ -21,7 +22,7 @@ public class Device {
     }
 
     public Device(String name, String endpoint, BigDecimal forecastDeviation, Integer fluctuation, Integer dtuSize,
-            String profile,
+            String profile, String capabilityProfile,
             Map<Integer, Map<Integer, Power>> powerPerDayPerPtu) {
         this.name = name;
         this.endpoint = endpoint;
@@ -29,6 +30,7 @@ public class Device {
         this.fluctuation = fluctuation;
         this.dtuSize = dtuSize;
         this.profile = profile;
+        this.capabilityProfile = capabilityProfile;
         this.powerPerDayPerPtu = powerPerDayPerPtu;
     }
 
@@ -76,8 +78,16 @@ public class Device {
         return profile;
     }
 
+    public String getCapabilityProfile() {
+        return capabilityProfile;
+    }
+
     public void setProfile(String profile) {
         this.profile = profile;
+    }
+
+    public void setCapabilityProfile(String capabilityProfile) {
+        this.capabilityProfile = capabilityProfile;
     }
 
     public Map<Integer, Map<Integer, Power>> getPowerPerDayPerPtu() {
@@ -88,4 +98,6 @@ public class Device {
             Map<Integer, Map<Integer, Power>> powerPerDayPerPtu) {
         this.powerPerDayPerPtu = powerPerDayPerPtu;
     }
+
+
 }

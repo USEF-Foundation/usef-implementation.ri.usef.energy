@@ -45,6 +45,7 @@ public class DataFactory {
     private static final String SEPERATOR = "_";
 
     private Random RANDOM;
+    private List<String> dayCycle;
 
     private Data data;
     private List<CategoryConfig> categoryConfigs;
@@ -63,6 +64,8 @@ public class DataFactory {
 
             RANDOM = new Random(data.getSettings().getSeed());
 
+            dayCycle = data.getSettings().getDayCycle();
+
             categoryConfigs = CategoryConfig.readCategoryConfig(pbcWorkbook);
 
             deviceConfigs = DeviceConfig.readDeviceConfig(pbcWorkbook);
@@ -80,6 +83,10 @@ public class DataFactory {
 
     public Random getSeededRandom() {
         return RANDOM;
+    }
+
+    public List<String> getDayCycle() {
+        return dayCycle;
     }
 
     private void initConnections(Workbook pbcWorkbook) {
@@ -149,7 +156,7 @@ public class DataFactory {
                                 .toMap(DeviceProfile::getPtu, deviceProfile -> mapToPower(deviceProfile, finalForecastDeviation))));
 
         return new Device(name, endpoint, forecastDeviation, deviceConfig.getFluctuation(), deviceConfig.getDtuSize(),
-                deviceConfig.getCapabilityProfile(), powerPerDayPerPtu);
+                deviceConfig.getProfile(),deviceConfig.getCapabilityProfile(), powerPerDayPerPtu);
     }
 
     private Power mapToPower(DeviceProfile deviceProfile, BigDecimal finalForecastDeviation) {

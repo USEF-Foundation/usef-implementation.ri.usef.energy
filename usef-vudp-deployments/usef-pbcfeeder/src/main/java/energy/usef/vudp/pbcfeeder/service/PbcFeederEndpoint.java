@@ -22,11 +22,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import energy.usef.vudp.pbcfeeder.dto.Settings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import energy.usef.vudp.pbcfeeder.DataRepository;
 import energy.usef.vudp.pbcfeeder.dto.Data;
+import energy.usef.vudp.pbcfeeder.dto.Connection;
+
+import java.util.List;
 
 /**
  * Endpoint to request data from the PBCFeeder.
@@ -40,11 +44,19 @@ public class PbcFeederEndpoint {
     private DataRepository dataRepository;
 
     @GET
-    @Path("/data")
+    @Path("/connections")
     @Produces(MediaType.APPLICATION_JSON)
-    public Data getData() {
+    public List<Connection> getConnections() {
         LOGGER.info("Retrieving Data");
-        return dataRepository.findData();
+        return dataRepository.findData().getConnection();
+    }
+
+    @GET
+    @Path("/settings")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Settings getSettings() {
+        LOGGER.info("Retrieving Data");
+        return dataRepository.findData().getSettings();
     }
 
 }

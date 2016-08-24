@@ -17,6 +17,10 @@
 package energy.usef.vudp.pbcfeeder;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
@@ -24,12 +28,12 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
+import energy.usef.vudp.pbcfeeder.dto.Connection;
+import energy.usef.vudp.pbcfeeder.dto.Settings;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import energy.usef.vudp.pbcfeeder.dto.Data;
 
 /**
  * RestService for fetching JSON-data from PBCFeeder-deployment. The endpoint of the PBCFeeder is configured within the main
@@ -41,19 +45,38 @@ public class PbcFeederClient {
     @Inject
     private VudpConfigPbcFeeder config;
 
-    public Data findData() {
-        String pbcEndpoint = config.getProperty(VudpConfigPbcFeederParam.PBC_FEEDER_ENDPOINT) + "/data";
+    public List<Connection> findConnections() {
+        String pbcEndpoint = config.getProperty(VudpConfigPbcFeederParam.PBC_FEEDER_ENDPOINT) + "/connections";
 
         String value = get(pbcEndpoint);
         ObjectMapper mapper = new ObjectMapper();
 
-        Data data = null;
+        List<Connection> connections = new ArrayList<>();
+
         try {
-            data = mapper.readValue(value, new TypeReference<Data>() { });
+            connections = mapper.readValue(value, new TypeReference<List<Connection>>() { });
         } catch (IOException e) {
             LOGGER.error("Exception caught: {}", e);
         }
-        return data;
+
+        return connections;
+    }
+
+    public Map<String,Object> findSettings() {
+        String pbcEndpoint = config.getProperty(VudpConfigPbcFeederParam.PBC_FEEDER_ENDPOINT) + "/settings";
+
+        String value = get(pbcEndpoint);
+        ObjectMapper mapper = new ObjectMapper();
+
+        Map<String,Object> settings = null;
+
+        try {
+            settings = mapper.readValue(value, new TypeReference<Map<String,Object>>() { });
+        } catch (IOException e) {
+            LOGGER.error("Exception caught: {}", e);
+        }
+
+        return settings;
     }
 
     /**

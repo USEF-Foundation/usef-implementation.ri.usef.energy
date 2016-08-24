@@ -20,7 +20,6 @@ import energy.usef.agr.dto.ConnectionPortfolioDto;
 import energy.usef.agr.dto.ElementDto;
 import energy.usef.agr.dto.ElementDtuDataDto;
 import energy.usef.agr.dto.ElementTypeDto;
-//import energy.usef.vudp.pbcfeeder.PbcFeederService;
 import energy.usef.agr.workflow.plan.connection.profile.AgrUpdateElementDataStoreParameter;
 import energy.usef.core.workflow.DefaultWorkflowContext;
 import energy.usef.core.workflow.WorkflowContext;
@@ -30,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import energy.usef.vudp.agr.pbcfeederimpl.PbcFeederService;
 import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Before;
@@ -51,20 +51,19 @@ public class AgrUpdateElementDataStoreStubTest {
 
     private AgrUpdateElementDataStoreStub agrUpdateElementDataStoreStub;
 
-    //@Mock
-    //private PbcFeederService pbcFeederService;
+    @Mock
+    private PbcFeederService pbcFeederService;
 
     @Before
     public void init() {
-        /*
         agrUpdateElementDataStoreStub = new AgrUpdateElementDataStoreStub();
         Whitebox.setInternalState(agrUpdateElementDataStoreStub, pbcFeederService);
-        */
+
     }
 
     @Test
     public void testInvoke() throws Exception {
-        /*
+
         Mockito.when(pbcFeederService
                 .fillElementsFromPBCFeeder(Matchers.anyListOf(ConnectionPortfolioDto.class), Matchers.any(LocalDate.class),
                         Matchers.any(Integer.class), Matchers.any(Integer.class))).then(call -> {
@@ -114,11 +113,11 @@ public class AgrUpdateElementDataStoreStubTest {
                 .fillElementsFromPBCFeeder(Matchers.anyListOf(ConnectionPortfolioDto.class), Matchers.any(LocalDate.class),
                         Matchers.anyInt(), Matchers.anyInt());
 
-        //Assert.assertNotNull(elementDtoList);
+        Assert.assertNotNull(elementDtoList);
 
         // 2 elements per connection, so 4 x 2 elements expected
-        //Assert.assertEquals(4 * 2, elementDtoList.size());
-        */
+        Assert.assertEquals(4 * 2, elementDtoList.size());
+
     }
 
     private WorkflowContext buildInputContext() {

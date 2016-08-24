@@ -18,17 +18,13 @@ package energy.usef.vudp.agr.pbcfeederimpl;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.*;
 
 import javax.inject.Inject;
 
-import energy.usef.vudp.pbcfeeder.dto.Data;
+import energy.usef.vudp.pbcfeeder.dto.Settings;
+import energy.usef.vudp.pbcfeeder.dto.Connection;
+import energy.usef.vudp.pbcfeeder.dto.Device;
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,12 +33,6 @@ import energy.usef.agr.dto.ConnectionPortfolioDto;
 import energy.usef.agr.dto.ElementDto;
 import energy.usef.agr.dto.ElementDtuDataDto;
 import energy.usef.agr.dto.ElementTypeDto;
-import energy.usef.agr.dto.ForecastPowerDataDto;
-import energy.usef.agr.dto.PowerContainerDto;
-import energy.usef.agr.dto.PowerDataDto;
-import energy.usef.agr.dto.UdiPortfolioDto;
-import energy.usef.core.util.DateTimeUtil;
-import energy.usef.core.util.PtuUtil;
 
 import energy.usef.vudp.pbcfeeder.PbcFeederClient;
 
@@ -52,76 +42,117 @@ import energy.usef.vudp.pbcfeeder.PbcFeederClient;
 public class PbcFeederService {
     private static final Logger LOGGER = LoggerFactory.getLogger(PbcFeederService.class);
 
+    private static final String ELEMENT_SYNTHETIC_DATA_PROFILE_PREFIX = "UCL";
+    private static final String ELEMENT_SYNTHETIC_DATA_SUFFIX = "UCL";
+    private static final int MINUTES_PER_DAY = 24 * 60;
+    private static final boolean SYNTHETIC_DATA = true;
+    private static final boolean MANAGED_DEVICE = false;
+
     @Inject
     private PbcFeederClient pbcFeederClient;
 
     public List<ElementDto> fillElementsFromPBCFeeder(List<ConnectionPortfolioDto> connectionPortfolioDtoList, LocalDate period,
             Integer ptusPerDay, Integer ptuSize) {
-        LOGGER.info("fillElementsFromPBCFeeder is invoked");
+
         List<ElementDto> elementDtoList = new ArrayList<>();
-        Data data = pbcFeederClient.findData();
 
-        /*
-        // fetch PBC data for the period
-        List<PbcStubDataDto> pbcStubDataList = pbcFeederClient.getPbcStubDataList(period, 1, ptusPerDay);
+        // fetch PBC data
+        List<Connection> connections = pbcFeederClient.findConnections();
+        LOGGER.debug("Nr of connections found in PBC feeder {}",connections.size());
 
-        // map the PBC data into uncontrolled load and PV load forecast
-        Map<Integer, BigInteger> uncontrolledLoadPerPtu = fetchUncontrolledLoad(pbcStubDataList);
-        //pv is production so should be negative for the methods below.
-        Map<Integer, BigInteger> pvLoadForecastPerPtu = negateMap(fetchPVLoadForecast(pbcStubDataList));
+        Map<String,Object> settings = pbcFeederClient.findSettings();
+        LOGGER.debug("Following settings found {}",settings.toString());
 
-        // for each connection create 3 elements (PV1 and ADS1 and UCL1)
+        Integer pbcDay = determinePbcDay(period, settings);
+        LOGGER.debug("Following PBC day determined {}",pbcDay);
+
+        // go through connections and create synthetic and managed device elements
         connectionPortfolioDtoList.stream().forEach(connectionPortfolioDTO -> {
+            Connection pbcFeederConnection = findConnectionInPbcData(connections, connectionPortfolioDTO);
 
-            elementDtoList.add(createManagedDeviceForADS(period, ptusPerDay, ptuSize, connectionPortfolioDTO));
+            if(pbcFeederConnection != null){
+                elementDtoList.add(createSyntheticDataElement(ptuSize, ptusPerDay, connectionPortfolioDTO, pbcFeederConnection, pbcDay));
 
-            elementDtoList.add(createManagedDeviceForPV(ptusPerDay, ptuSize, pvLoadForecastPerPtu, connectionPortfolioDTO));
-
-            elementDtoList.add(createSyntheticData(ptusPerDay, ptuSize, uncontrolledLoadPerPtu, connectionPortfolioDTO));
+                elementDtoList.addAll(createManagedDeviceElements(connectionPortfolioDTO, pbcFeederConnection, pbcDay));
+            }
+            else{
+                LOGGER.error("Connection {} not found in PBC feeder Excelsheet",connectionPortfolioDTO.getConnectionEntityAddress());
+            }
         });
-        */
 
         return elementDtoList;
     }
 
-    /*
-    private ElementDto createSyntheticData(Integer ptusPerDay, Integer ptuSize, Map<Integer, BigInteger> uncontrolledLoadPerPtu,
-            ConnectionPortfolioDto connectionPortfolioDTO) {
-        ElementDto syntheticDataElement = buildElement(ELEMENT_SYNTHETIC_DATA_SUFFIX, ptuSize,
-                ElementTypeDto.SYNTHETIC_DATA, ELEMENT_SYNTHETIC_DATA_PROFILE_PREFIX,
-                connectionPortfolioDTO.getConnectionEntityAddress());
-        // add uncontrolled load to the synthetic data element (dtu size = ptu size)
-        for (int dtuIndex = 1; dtuIndex <= ptusPerDay; dtuIndex++) {
+    private Integer determinePbcDay(LocalDate period, Map<String, Object> settings) {
+        List<String> pbcDays = (List<String>) settings.get("dayCycle");
+        Integer dayOfYear = period.getDayOfYear() - 1;
+        Integer index = dayOfYear % pbcDays.size();
+        return Integer.parseInt(pbcDays.get(index));
+    }
+
+    private Connection findConnectionInPbcData(List<Connection> connections, ConnectionPortfolioDto connectionPortfolioDTO) {
+        Connection pbcFeederConnection = connections.stream()
+                .filter(connection -> connection.getEan().equals(connectionPortfolioDTO.getConnectionEntityAddress()))
+                .findAny()
+                .orElse(null);
+        return pbcFeederConnection;
+    }
+
+    private List<ElementDto> createManagedDeviceElements(ConnectionPortfolioDto connectionPortfolioDTO, Connection pbcFeederConnection, Integer pbcDay) {
+        List<ElementDto> managedDeviceElementList = new ArrayList<>();
+        pbcFeederConnection.getDevices().forEach(device -> {
+            int dtuSize = device.getDtuSize();
+            int dtusPerDay = MINUTES_PER_DAY / dtuSize;
+
+            ElementDto managedDeviceElement = buildElement(device.getEndpoint(), dtuSize,
+                    ElementTypeDto.MANAGED_DEVICE, device.getProfile(),
+                    connectionPortfolioDTO.getConnectionEntityAddress(),MANAGED_DEVICE);
+
+            addManagedDeviceElementDtuData(managedDeviceElement, device, pbcDay, dtusPerDay);
+
+            managedDeviceElementList.add(managedDeviceElement);
+        });
+
+        return managedDeviceElementList;
+    }
+
+    private void addManagedDeviceElementDtuData(ElementDto managedDeviceElement, Device device, Integer pbcDay, Integer dtusPerDay) {
+        BigDecimal forecastDeviation = BigDecimal.ONE.add(device.getForecastDeviation());
+        for (int dtuIndex = 1; dtuIndex <= dtusPerDay; dtuIndex++) {
             ElementDtuDataDto elementDtuDataDto = new ElementDtuDataDto();
             elementDtuDataDto.setDtuIndex(dtuIndex);
-            elementDtuDataDto.setProfileUncontrolledLoad(uncontrolledLoadPerPtu.get(elementDtuDataDto.getDtuIndex()));
+            BigDecimal profileAverageConsumption = BigDecimal.valueOf(device.getPowerPerDayPerPtu().get(pbcDay).get(dtuIndex).getConsumption());
+            BigDecimal profileAverageProduction = BigDecimal.valueOf(device.getPowerPerDayPerPtu().get(pbcDay).get(dtuIndex).getProduction());
+            BigDecimal profilePotentialFlexConsumption = BigDecimal.valueOf(device.getPowerPerDayPerPtu().get(pbcDay).get(dtuIndex).getFlexConsumption());
+            BigDecimal profilePotentialFlexProduction = BigDecimal.valueOf(device.getPowerPerDayPerPtu().get(pbcDay).get(dtuIndex).getFlexProduction());
+
+            elementDtuDataDto.setProfileAverageConsumption(profileAverageConsumption.multiply(forecastDeviation).toBigInteger());
+            elementDtuDataDto.setProfileAverageProduction(profileAverageProduction.multiply(forecastDeviation).toBigInteger());
+            elementDtuDataDto.setProfilePotentialFlexConsumption(profilePotentialFlexConsumption.multiply(forecastDeviation).toBigInteger());
+            elementDtuDataDto.setProfilePotentialFlexProduction(profilePotentialFlexProduction.multiply(forecastDeviation).toBigInteger());
+
+            managedDeviceElement.getElementDtuData().add(elementDtuDataDto);
+        }
+    }
+
+    private ElementDto createSyntheticDataElement(Integer ptuSize, Integer ptusPerDay, ConnectionPortfolioDto connectionPortfolioDTO, Connection pbcFeederConnection, Integer pbcDay) {
+        ElementDto syntheticDataElement = buildElement(ELEMENT_SYNTHETIC_DATA_SUFFIX, ptuSize,
+                ElementTypeDto.SYNTHETIC_DATA, ELEMENT_SYNTHETIC_DATA_PROFILE_PREFIX,
+                connectionPortfolioDTO.getConnectionEntityAddress(), SYNTHETIC_DATA);
+        for (int ptuIndex = 1; ptuIndex <= ptusPerDay; ptuIndex++) {
+            ElementDtuDataDto elementDtuDataDto = new ElementDtuDataDto();
+            elementDtuDataDto.setDtuIndex(ptuIndex);
+            elementDtuDataDto.setProfileUncontrolledLoad(BigInteger.valueOf(pbcFeederConnection.getUncontrolled().get(pbcDay).get(ptuIndex).getForecast()));
             syntheticDataElement.getElementDtuData().add(elementDtuDataDto);
         }
         return syntheticDataElement;
     }
 
-    private ElementDto createManagedDeviceForPV(Integer ptusPerDay, Integer ptuSize, Map<Integer, BigInteger> pvLoadForecastPerPtu,
-            ConnectionPortfolioDto connectionPortfolioDTO) {
-        ElementDto managedDevicePVElement = buildElement(ELEMENT_MANAGED_DEVICE_PV_SUFFIX, ptuSize,
-                ElementTypeDto.MANAGED_DEVICE, ELEMENT_PV_PROFILE_PREFIX, connectionPortfolioDTO.getConnectionEntityAddress());
-        addElementData(ptusPerDay, pvLoadForecastPerPtu, managedDevicePVElement);
-        return managedDevicePVElement;
-    }
-
-    private ElementDto createManagedDeviceForADS(LocalDate period, Integer ptusPerDay, Integer ptuSize,
-            ConnectionPortfolioDto connectionPortfolioDTO) {
-        Map<Integer, BigInteger> adsLoadPerPtu = createADSLoadMap(period, ptuSize);
-
-        ElementDto managedDeviceADSElement = buildElement(ELEMENT_MANAGED_DEVICE_ADS_SUFFIX, ptuSize,
-                ElementTypeDto.MANAGED_DEVICE, ELEMENT_ADS_PROFILE_PREFIX, connectionPortfolioDTO.getConnectionEntityAddress());
-        addElementData(ptusPerDay, adsLoadPerPtu, managedDeviceADSElement);
-        return managedDeviceADSElement;
-    }
-
     private ElementDto buildElement(String id, Integer dtuSize, ElementTypeDto elementType, String profile,
-            String connectionEntityAddress) {
+                                    String connectionEntityAddress, boolean syntheticData) {
         ElementDto elementDto = new ElementDto();
-        elementDto.setId(connectionEntityAddress + "." + id);
+        if(syntheticData){elementDto.setId(connectionEntityAddress + "." + id);}
+        else{elementDto.setId(id);}
         elementDto.setElementType(elementType);
         elementDto.setProfile(profile);
         elementDto.setConnectionEntityAddress(connectionEntityAddress);
@@ -129,82 +160,4 @@ public class PbcFeederService {
 
         return elementDto;
     }
-
-    private void addElementData(Integer ptusPerDay, Map<Integer, BigInteger> loadPerDtu, ElementDto elementDto) {
-        for (int dtuIndex = 1; dtuIndex <= ptusPerDay; dtuIndex++) {
-            addElementDtuData(elementDto, dtuIndex, loadPerDtu.get(dtuIndex));
-        }
-    }
-
-    private void addElementDtuData(ElementDto elementDto, Integer ptuIndex, BigInteger load) {
-        ElementDtuDataDto elementDtuDataDto = new ElementDtuDataDto();
-        elementDtuDataDto.setDtuIndex(ptuIndex);
-
-        // set average load production / consumption
-        if (load.compareTo(BigInteger.ZERO) < 0) {
-            elementDtuDataDto.setProfileAverageProduction(load.abs());
-            elementDtuDataDto.setProfileAverageConsumption(BigInteger.ZERO);
-        } else {
-            elementDtuDataDto.setProfileAverageProduction(BigInteger.ZERO);
-            elementDtuDataDto.setProfileAverageConsumption(load);
-        }
-
-        elementDtuDataDto.setProfilePotentialFlexProduction(elementDtuDataDto.getProfileAverageProduction().negate());
-        elementDtuDataDto.setProfilePotentialFlexConsumption(elementDtuDataDto.getProfileAverageConsumption().negate());
-
-        elementDto.getElementDtuData().add(elementDtuDataDto);
-    }
-
-
-    private Map<Integer, BigInteger> fetchUncontrolledLoad(List<PbcStubDataDto> pbcStubDataDtos) {
-        return pbcStubDataDtos.stream()
-                .collect(Collectors.toMap(pbcStubDataDto -> pbcStubDataDto.getPtuContainer().getPtuIndex(),
-                        pbcStubDataDto -> BigInteger.valueOf(Math.round(pbcStubDataDto.getCongestionPointAvg()))));
-    }
-
-    private Map<Integer, BigInteger> fetchPVLoadForecast(List<PbcStubDataDto> pbcStubDataDtos) {
-        return pbcStubDataDtos.stream()
-                .collect(Collectors.toMap(pbcStubDataDto -> pbcStubDataDto.getPtuContainer().getPtuIndex(),
-                        pbcStubDataDto -> BigInteger.valueOf(Math.round(pbcStubDataDto.getPvLoadForecast()))));
-    }
-
-
-    private BigInteger fetchADSLoadConstant() {
-        Random random = new Random();
-        BigInteger load = BigInteger.valueOf(random.nextInt(MAGIC_DEVICE_MAX - MAGIC_DEVICE_MIN) + MAGIC_DEVICE_MIN);
-        return random.nextBoolean() ? load : load.negate();
-    }
-
-
-    private Map<Integer, BigInteger> createADSLoadMap(LocalDate period, Integer timeSize) {
-        Integer timeSlotsPerDay = PtuUtil.getNumberOfPtusPerDay(period, timeSize);
-        final BigInteger adsLoadConstant = fetchADSLoadConstant();
-        return IntStream.rangeClosed(1, timeSlotsPerDay).mapToObj(Integer::valueOf)
-                .collect(Collectors.toMap(Function.identity(), i -> adsLoadConstant));
-    }
-    */
-
-    private Map<Integer, BigInteger> negateMap(Map<Integer, BigInteger> powerMap) {
-        return powerMap.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().negate()));
-    }
-
-    private void updatePowerValue(PowerDataDto powerDataDto, Double value) {
-        if (value != null) {
-            BigInteger power = BigInteger.valueOf((int) Math.round(value));
-            updatePowerValue(powerDataDto, power);
-        }
-    }
-
-    private void updatePowerValue(PowerDataDto powerDataDto, BigInteger power) {
-        if (power != null) {
-            if (power.compareTo(BigInteger.ZERO) >= 0) {
-                powerDataDto.setAverageConsumption(power);
-                powerDataDto.setAverageProduction(BigInteger.ZERO);
-            } else {
-                powerDataDto.setAverageConsumption(BigInteger.ZERO);
-                powerDataDto.setAverageProduction(power.abs());
-            }
-        }
-    }
-
 }
