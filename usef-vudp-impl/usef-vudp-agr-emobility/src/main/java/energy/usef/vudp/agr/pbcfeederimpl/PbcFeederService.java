@@ -22,6 +22,7 @@ import java.util.*;
 
 import javax.inject.Inject;
 
+import energy.usef.core.util.PtuUtil;
 import energy.usef.vudp.pbcfeeder.dto.Settings;
 import energy.usef.vudp.pbcfeeder.dto.Connection;
 import energy.usef.vudp.pbcfeeder.dto.Device;
@@ -51,10 +52,22 @@ public class PbcFeederService {
     @Inject
     private PbcFeederClient pbcFeederClient;
 
+    /**
+     * Service which extracts data from the pbc feeder client and creates elements based on
+     * this data, the connectionportfolio and the given period.
+     *
+     * @param connectionPortfolioDtoList current connection portfolio
+     * @param period period for which elements should be created
+     * @param ptuSize duriation of a PTU in minutes
+     * @return List<ElementDto> a list of elements to be created for the given period
+     */
     public List<ElementDto> fillElementsFromPBCFeeder(List<ConnectionPortfolioDto> connectionPortfolioDtoList, LocalDate period,
-            Integer ptusPerDay, Integer ptuSize) {
+            Integer ptuSize) {
 
         List<ElementDto> elementDtoList = new ArrayList<>();
+
+        //Determine number of ptus per day based on ptu size
+        int ptusPerDay = PtuUtil.getNumberOfPtusPerDay(period, ptuSize);
 
         // fetch PBC data
         List<Connection> connections = pbcFeederClient.findConnections();

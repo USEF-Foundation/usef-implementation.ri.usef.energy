@@ -90,7 +90,7 @@ public class PbcFeederServiceTest {
                 });
 
         // invocation
-        List<ElementDto> elementList = pbcFeederService.fillElementsFromPBCFeeder(connectionPortfolio, period, ptusPerDay, 120);
+        List<ElementDto> elementList = pbcFeederService.fillElementsFromPBCFeeder(connectionPortfolio, period, 120);
 
         if(missingConnection){
             missingConnnectionAssertions(elementList);
