@@ -54,6 +54,12 @@ public class AgrUpdateElementDataStoreStub implements WorkflowStep {
     @Inject
     private PbcFeederService pbcFeederService;
 
+    /**
+     * Invoke step to create elements based on the data from the PBC feeder
+     *
+     * @param context incoming workflow context
+     * @return WorkflowContext containing a list of elements
+     */
     @Override
     public WorkflowContext invoke(WorkflowContext context) {
         LOGGER.info("AgrUpdateElementDataStore is invoked");
@@ -64,11 +70,9 @@ public class AgrUpdateElementDataStoreStub implements WorkflowStep {
         @SuppressWarnings("unchecked")
         List<ConnectionPortfolioDto> connectionPortfolioDtoList = context.get(IN.CONNECTION_PORTFOLIO_LIST.name(), List.class);
 
-        int ptusPerDay = PtuUtil.getNumberOfPtusPerDay(period, ptuDuration);
-
         // retrieve some input from the PBC Feeder
         List<ElementDto> elementDtoList = pbcFeederService
-                .fillElementsFromPBCFeeder(connectionPortfolioDtoList, period, ptusPerDay, ptuDuration);
+                .fillElementsFromPBCFeeder(connectionPortfolioDtoList, period, ptuDuration);
 
         context.setValue(OUT.ELEMENT_LIST.name(), elementDtoList);
 

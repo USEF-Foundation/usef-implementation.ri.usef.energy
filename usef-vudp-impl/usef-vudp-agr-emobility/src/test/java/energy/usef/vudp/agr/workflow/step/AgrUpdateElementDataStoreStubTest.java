@@ -38,6 +38,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
@@ -66,40 +67,12 @@ public class AgrUpdateElementDataStoreStubTest {
 
         Mockito.when(pbcFeederService
                 .fillElementsFromPBCFeeder(Matchers.anyListOf(ConnectionPortfolioDto.class), Matchers.any(LocalDate.class),
-                        Matchers.any(Integer.class), Matchers.any(Integer.class))).then(call -> {
+                        Matchers.any(Integer.class))).then(call -> {
             List<ElementDto> elements = new ArrayList<>();
             List<ConnectionPortfolioDto> connections = (List<ConnectionPortfolioDto>) call.getArguments()[0];
 
             connections.forEach(connection -> {
-                for (ElementTypeDto elementType : ElementTypeDto.values()) {
-                    ElementDto elementDto = new ElementDto();
-                    switch (elementType) {
-                    case SYNTHETIC_DATA:
-                        elementDto.setId("PV1");
-                        elementDto.setElementType(ElementTypeDto.SYNTHETIC_DATA);
-                        break;
-                    case MANAGED_DEVICE:
-                        elementDto.setId("ADS1");
-                        elementDto.setElementType(ElementTypeDto.MANAGED_DEVICE);
-                        break;
-                    }
-                    IntStream.rangeClosed(1, (Integer) call.getArguments()[2]).forEach(index -> {
-                        ElementDtuDataDto elementDtuDataDto = new ElementDtuDataDto();
-                        elementDtuDataDto.setDtuIndex(index);
-                        elementDtuDataDto.setProfileAverageProduction(BigInteger.ZERO);
-                        elementDtuDataDto.setProfileAverageConsumption(BigInteger.valueOf(1000L));
-                        elementDtuDataDto.setProfilePotentialFlexConsumption(BigInteger.ZERO);
-                        elementDtuDataDto.setProfilePotentialFlexProduction(BigInteger.ZERO);
-
-                        if (elementType == ElementTypeDto.SYNTHETIC_DATA) {
-                            elementDtuDataDto.setProfileUncontrolledLoad(BigInteger.valueOf(100L));
-                        }
-
-                        elementDto.getElementDtuData().add(elementDtuDataDto);
-                    });
-
-                    elements.add(elementDto);
-                }
+                createElementsForConnection(connection, call, elements);
             });
             return elements;
         });
@@ -111,13 +84,55 @@ public class AgrUpdateElementDataStoreStubTest {
 
         Mockito.verify(pbcFeederService, Mockito.times(1))
                 .fillElementsFromPBCFeeder(Matchers.anyListOf(ConnectionPortfolioDto.class), Matchers.any(LocalDate.class),
-                        Matchers.anyInt(), Matchers.anyInt());
+                        Matchers.anyInt());
 
         Assert.assertNotNull(elementDtoList);
 
         // 2 elements per connection, so 4 x 2 elements expected
         Assert.assertEquals(4 * 2, elementDtoList.size());
 
+    }
+
+    private void createElementsForConnection(ConnectionPortfolioDto connection, InvocationOnMock call, List<ElementDto> elements) {
+        for (ElementTypeDto elementType : ElementTypeDto.values()) {
+            ElementDto elementDto = new ElementDto();
+            setElementType(elementDto, elementType);
+
+            addDtuData(elementDto, call, elementType);
+
+
+            elements.add(elementDto);
+        }
+    }
+
+    private void setElementType(ElementDto elementDto, ElementTypeDto elementType) {
+        switch (elementType) {
+            case SYNTHETIC_DATA:
+                elementDto.setId("PV1");
+                elementDto.setElementType(ElementTypeDto.SYNTHETIC_DATA);
+                break;
+            case MANAGED_DEVICE:
+                elementDto.setId("ADS1");
+                elementDto.setElementType(ElementTypeDto.MANAGED_DEVICE);
+                break;
+        }
+    }
+
+    private void addDtuData(ElementDto elementDto, InvocationOnMock call, ElementTypeDto elementType) {
+        IntStream.rangeClosed(1, (Integer) call.getArguments()[2]).forEach(index -> {
+            ElementDtuDataDto elementDtuDataDto = new ElementDtuDataDto();
+            elementDtuDataDto.setDtuIndex(index);
+            elementDtuDataDto.setProfileAverageProduction(BigInteger.ZERO);
+            elementDtuDataDto.setProfileAverageConsumption(BigInteger.valueOf(1000L));
+            elementDtuDataDto.setProfilePotentialFlexConsumption(BigInteger.ZERO);
+            elementDtuDataDto.setProfilePotentialFlexProduction(BigInteger.ZERO);
+
+            if (elementType == ElementTypeDto.SYNTHETIC_DATA) {
+                elementDtuDataDto.setProfileUncontrolledLoad(BigInteger.valueOf(100L));
+            }
+
+            elementDto.getElementDtuData().add(elementDtuDataDto);
+        });
     }
 
     private WorkflowContext buildInputContext() {
