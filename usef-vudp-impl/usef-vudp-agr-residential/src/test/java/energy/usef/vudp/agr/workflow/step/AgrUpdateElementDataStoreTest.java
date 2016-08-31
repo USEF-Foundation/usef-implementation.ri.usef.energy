@@ -43,22 +43,22 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 /**
- * Test class in charge of the unit tests related to the {@link AgrUpdateElementDataStoreStub} class.
+ * Test class in charge of the unit tests related to the {@link AgrUpdateElementDataStore} class.
  */
 @RunWith(PowerMockRunner.class)
-public class AgrUpdateElementDataStoreStubTest {
+public class AgrUpdateElementDataStoreTest {
 
     private final static LocalDate PERIOD = new LocalDate("2015-10-10");
 
-    private AgrUpdateElementDataStoreStub agrUpdateElementDataStoreStub;
+    private AgrUpdateElementDataStore agrUpdateElementDataStore;
 
     @Mock
     private PbcFeederService pbcFeederService;
 
     @Before
     public void init() {
-        agrUpdateElementDataStoreStub = new AgrUpdateElementDataStoreStub();
-        Whitebox.setInternalState(agrUpdateElementDataStoreStub, pbcFeederService);
+        agrUpdateElementDataStore = new AgrUpdateElementDataStore();
+        Whitebox.setInternalState(agrUpdateElementDataStore, pbcFeederService);
 
     }
 
@@ -78,7 +78,7 @@ public class AgrUpdateElementDataStoreStubTest {
         });
 
         // invocation
-        WorkflowContext context = agrUpdateElementDataStoreStub.invoke(buildInputContext());
+        WorkflowContext context = agrUpdateElementDataStore.invoke(buildInputContext());
 
         List<ElementDto> elementDtoList = context.get(AgrUpdateElementDataStoreParameter.OUT.ELEMENT_LIST.name(), List.class);
 

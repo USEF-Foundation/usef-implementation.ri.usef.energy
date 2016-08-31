@@ -21,7 +21,6 @@ import energy.usef.agr.dto.ElementDto;
 import energy.usef.vudp.agr.pbcfeederimpl.PbcFeederService;
 import energy.usef.agr.workflow.plan.connection.profile.AgrUpdateElementDataStoreParameter.IN;
 import energy.usef.agr.workflow.plan.connection.profile.AgrUpdateElementDataStoreParameter.OUT;
-import energy.usef.core.util.PtuUtil;
 import energy.usef.core.workflow.WorkflowContext;
 import energy.usef.core.workflow.WorkflowStep;
 
@@ -48,8 +47,8 @@ import org.slf4j.LoggerFactory;
  * <li>ELEMENT_LIST: The created Element list ({@link List} of {@link ElementDto} objects).</li>
  * </ul>
  */
-public class AgrUpdateElementDataStoreStub implements WorkflowStep {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AgrUpdateElementDataStoreStub.class);
+public class AgrUpdateElementDataStore implements WorkflowStep {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AgrUpdateElementDataStore.class);
 
     @Inject
     private PbcFeederService pbcFeederService;

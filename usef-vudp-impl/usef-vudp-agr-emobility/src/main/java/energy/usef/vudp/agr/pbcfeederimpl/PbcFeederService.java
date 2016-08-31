@@ -130,19 +130,18 @@ public class PbcFeederService {
     }
 
     private void addManagedDeviceElementDtuData(ElementDto managedDeviceElement, Device device, Integer pbcDay, Integer dtusPerDay) {
-        BigDecimal forecastDeviation = BigDecimal.ONE.add(device.getForecastDeviation());
         for (int dtuIndex = 1; dtuIndex <= dtusPerDay; dtuIndex++) {
             ElementDtuDataDto elementDtuDataDto = new ElementDtuDataDto();
             elementDtuDataDto.setDtuIndex(dtuIndex);
-            BigDecimal profileAverageConsumption = BigDecimal.valueOf(device.getPowerPerDayPerPtu().get(pbcDay).get(dtuIndex).getConsumption());
-            BigDecimal profileAverageProduction = BigDecimal.valueOf(device.getPowerPerDayPerPtu().get(pbcDay).get(dtuIndex).getProduction());
-            BigDecimal profilePotentialFlexConsumption = BigDecimal.valueOf(device.getPowerPerDayPerPtu().get(pbcDay).get(dtuIndex).getFlexConsumption());
-            BigDecimal profilePotentialFlexProduction = BigDecimal.valueOf(device.getPowerPerDayPerPtu().get(pbcDay).get(dtuIndex).getFlexProduction());
+            BigInteger profileAverageConsumption = BigInteger.valueOf(device.getPowerPerDayPerPtu().get(pbcDay).get(dtuIndex).getConsumption());
+            BigInteger profileAverageProduction = BigInteger.valueOf(device.getPowerPerDayPerPtu().get(pbcDay).get(dtuIndex).getProduction());
+            BigInteger profilePotentialFlexConsumption = BigInteger.valueOf(device.getPowerPerDayPerPtu().get(pbcDay).get(dtuIndex).getFlexConsumption());
+            BigInteger profilePotentialFlexProduction = BigInteger.valueOf(device.getPowerPerDayPerPtu().get(pbcDay).get(dtuIndex).getFlexProduction());
 
-            elementDtuDataDto.setProfileAverageConsumption(profileAverageConsumption.multiply(forecastDeviation).toBigInteger());
-            elementDtuDataDto.setProfileAverageProduction(profileAverageProduction.multiply(forecastDeviation).toBigInteger());
-            elementDtuDataDto.setProfilePotentialFlexConsumption(profilePotentialFlexConsumption.multiply(forecastDeviation).toBigInteger());
-            elementDtuDataDto.setProfilePotentialFlexProduction(profilePotentialFlexProduction.multiply(forecastDeviation).toBigInteger());
+            elementDtuDataDto.setProfileAverageConsumption(profileAverageConsumption);
+            elementDtuDataDto.setProfileAverageProduction(profileAverageProduction);
+            elementDtuDataDto.setProfilePotentialFlexConsumption(profilePotentialFlexConsumption);
+            elementDtuDataDto.setProfilePotentialFlexProduction(profilePotentialFlexProduction);
 
             managedDeviceElement.getElementDtuData().add(elementDtuDataDto);
         }
