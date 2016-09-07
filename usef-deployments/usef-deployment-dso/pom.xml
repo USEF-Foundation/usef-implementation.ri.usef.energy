@@ -50,6 +50,7 @@
                                     <arg value="ApplicationPersistenceUnit"/>
                                     <arg value="org.hibernate.dialect.H2Dialect"/>
                                     <arg value="./target/ddl/"/>
+                                    <arg value="USEF_DS"/>
                                     <!-- reference to the passed-in classpath reference -->
                                     <classpath refid="maven.compile.classpath"/>
                                 </java>
